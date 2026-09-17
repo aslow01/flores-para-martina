@@ -1,0 +1,98 @@
+---
+import { contador, fecha } from '../content/martina';
+---
+
+<section class="section contador" id="contador" aria-labelledby="contador-titulo">
+  <div class="container contador__grid">
+    <p class="eyebrow" data-reveal>{contador.eyebrow}</p>
+    <div class="contador__bloque" data-reveal data-reveal-delay="0.1">
+      {/* El texto real lo pone el navegador según la fecha; este es el estado de partida. */}
+      <h2 class="contador__titulo" id="contador-titulo">
+        <span class="contador__prefijo">{contador.despues.prefijo()}</span>
+        <span class="display contador__n tabular">0</span>
+        <span class="display contador__etiqueta">{contador.despues.etiqueta(0)}</span>
+      </h2>
+      <p class="contador__bajada">{contador.despues.bajada}</p>
+      <p class="contador__detalle tabular" aria-live="off"></p>
+      <time class="sr-only" datetime={fecha.iso}>21 de septiembre de 2026</time>
+    </div>
+  </div>
+</section>
+
+<style>
+  .contador {
+    padding-block: var(--space-l) var(--space-xl);
+  }
+  .contador__grid {
+    display: grid;
+    gap: var(--space-m);
+  }
+  .contador__bloque {
+    display: grid;
+    gap: var(--space-s);
+  }
+  .contador__titulo {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    grid-template-areas:
+      'prefijo prefijo'
+      'n etiqueta';
+    align-items: baseline;
+    column-gap: 0.18em;
+    font-weight: 400;
+  }
+  .contador__prefijo {
+    grid-area: prefijo;
+    font-family: var(--font-label);
+    font-size: var(--step-0);
+    letter-spacing: 0.14em;
+    color: var(--ink-3);
+    text-transform: lowercase;
+    margin-bottom: 0.2em;
+  }
+  .contador__n {
+    grid-area: n;
+    font-size: var(--step-5);
+    line-height: 0.85;
+    letter-spacing: -0.05em;
+    color: var(--honey);
+    font-weight: 900;
+    font-variation-settings: 'wght' 900;
+  }
+  .contador__etiqueta {
+    grid-area: etiqueta;
+    font-size: var(--step-3);
+    line-height: 1;
+    letter-spacing: -0.02em;
+    font-weight: 600;
+    font-variation-settings: 'wght' 600;
+    max-width: 9em;
+    text-wrap: balance;
+  }
+  .contador__bajada {
+    color: var(--ink-2);
+    font-size: var(--step-1);
+    max-width: 34ch;
+    text-wrap: pretty;
+  }
+  .contador__detalle {
+    font-family: var(--font-label);
+    font-size: var(--step--1);
+    letter-spacing: 0.1em;
+    color: var(--ink-3);
+    min-height: 1.5em;
+  }
+  @media (max-width: 720px) {
+    .contador__titulo {
+      grid-template-columns: 1fr;
+      grid-template-areas:
+        'prefijo'
+        'n'
+        'etiqueta';
+      row-gap: 0.1em;
+    }
+    .contador__etiqueta {
+      font-size: var(--step-2);
+    }
+  }
+</style>

@@ -1,0 +1,50 @@
+# Publica el sitio en GitHub Pages cada vez que hacés push a `main`.
+#
+# Una sola vez, en el repo: Settings → Pages → Build and deployment → Source: "GitHub Actions".
+# No hace falta configurar `base`: astro.config.mjs lo deduce del nombre del repo.
+# Para un dominio propio, descomentá las variables de entorno del paso de build.
+
+name: Publicar en GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    name: Construir
+    runs-on: ubuntu-latest
+    steps:
+      - name: Traer el código
+        uses: actions/checkout@v7
+
+      - name: Instalar dependencias y construir con Astro
+        uses: withastro/action@v6
+        with:
+          node-version: 22
+          package-manager: npm@latest
+        # env:
+        #   SITE_URL: https://flores.tudominio.com
+        #   BASE_PATH: /
+
+  deploy:
+    name: Publicar
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Subir a GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v5

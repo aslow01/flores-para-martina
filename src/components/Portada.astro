@@ -1,0 +1,177 @@
+---
+import { portada } from '../content/martina';
+const [l1, l2, l3] = portada.titulo;
+---
+
+<header class="portada" id="contenido">
+  <div class="portada__campo-wrap">
+    <canvas class="portada__campo" role="img" aria-label={portada.altCampo}></canvas>
+  </div>
+
+  <div class="container portada__grid">
+    <p class="eyebrow portada__eyebrow portada__eyebrow--izq tabular" data-portada>{portada.fechaCorta}</p>
+    <p class="eyebrow portada__eyebrow portada__eyebrow--der" data-portada>{portada.para}</p>
+
+    <div class="portada__texto">
+      <h1 class="display portada__titulo">
+        <span class="portada__linea portada__linea--nombre"><span>{l1}</span></span>
+        <span class="portada__linea"><span>{l2}</span></span>
+        <span class="portada__linea"><span><em>{l3}</em></span></span>
+      </h1>
+      <div class="portada__cuerpo">
+        <p class="portada__bajada" data-portada>{portada.bajada}</p>
+        <a class="portada__hint" href="#por-que" data-scroll="-8" data-portada>
+          <span class="portada__hint-linea" aria-hidden="true"></span>
+          <span class="portada__hint-texto">
+            <span class="eyebrow">{portada.hint}</span>
+            <span class="small">{portada.hintLargo}</span>
+          </span>
+        </a>
+      </div>
+    </div>
+  </div>
+</header>
+
+<style>
+  .portada {
+    position: relative;
+    min-height: 100svh;
+    display: grid;
+    overflow: clip;
+    isolation: isolate;
+  }
+  .portada__campo-wrap {
+    position: absolute;
+    inset: auto 0 0 0;
+    /* El campo ocupa el 55 % de la pantalla, salvo que la pantalla sea baja (una laptop):
+       entonces se achica lo justo para que las flores no tapen el texto. */
+    height: clamp(180px, calc((100svh - 2.6 * var(--step-4) - 264px) / 0.54), 55%);
+    z-index: 0;
+    pointer-events: none;
+    will-change: transform;
+  }
+  .portada__campo {
+    width: 100%;
+    height: 100%;
+  }
+  .portada__grid {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    grid-template-rows: auto 1fr;
+    align-items: start;
+    padding-block: var(--space-m) var(--space-l);
+    min-height: 100svh;
+  }
+  .portada__eyebrow {
+    margin: 0;
+  }
+  .portada__eyebrow--der {
+    text-align: right;
+  }
+  .portada__texto {
+    grid-column: 1 / -1;
+    align-self: start;
+    padding-block: clamp(1rem, 5vh, 4rem) var(--space-xl);
+    max-width: 100%;
+  }
+  .portada__titulo {
+    font-size: var(--step-4);
+    line-height: 0.94;
+    letter-spacing: -0.02em;
+  }
+  .portada__linea {
+    display: block;
+    overflow: hidden;
+    padding-bottom: 0.06em;
+    margin-bottom: -0.06em;
+  }
+  .portada__linea > span {
+    display: block;
+    will-change: transform;
+  }
+  /* Las líneas se esconden solo cuando la intro va a tapar la portada (lo decide main.ts). */
+  html.con-intro .portada__linea > span {
+    visibility: hidden;
+  }
+  .portada__linea--nombre > span {
+    font-size: 0.56em;
+    font-weight: 500;
+    font-variation-settings: 'wght' 500;
+    letter-spacing: -0.005em;
+    color: var(--ink-2);
+    margin-bottom: 0.18em;
+  }
+  .portada__titulo em {
+    color: var(--honey);
+  }
+  .portada__cuerpo {
+    margin-top: var(--space-m);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: var(--space-m) var(--space-xl);
+  }
+  .portada__bajada {
+    max-width: 30ch;
+    font-size: var(--step-1);
+    line-height: 1.4;
+    color: var(--ink-2);
+    text-wrap: pretty;
+  }
+  html.con-intro [data-portada] {
+    opacity: 0;
+  }
+  .portada__hint {
+    display: inline-flex;
+    padding-bottom: 0.35em;
+    align-items: flex-end;
+    gap: 1rem;
+    text-decoration: none;
+  }
+  .portada__hint-linea {
+    display: block;
+    width: 1px;
+    height: 3.2rem;
+    background: linear-gradient(to bottom, transparent, var(--ink));
+    transform-origin: 50% 0;
+    transition: transform var(--dur-base) var(--ease-out);
+  }
+  .portada__hint:hover .portada__hint-linea {
+    transform: scaleY(1.25);
+  }
+  .portada__hint-texto {
+    display: grid;
+    gap: 0.15rem;
+  }
+  .portada__hint-texto .eyebrow {
+    color: var(--ink);
+  }
+
+  @media (max-width: 720px) {
+    .portada__campo-wrap {
+      height: 52%;
+    }
+    .portada__grid {
+      grid-template-columns: 1fr;
+      grid-template-rows: auto auto 1fr;
+      row-gap: 0.25rem;
+    }
+    .portada__campo-wrap {
+      height: 58%;
+    }
+    .portada__eyebrow--der {
+      text-align: left;
+    }
+    .portada__texto {
+      padding-block: var(--space-m) 0;
+    }
+    .portada__cuerpo {
+      gap: var(--space-m);
+    }
+    .portada__bajada {
+      font-size: var(--step-0);
+    }
+  }
+</style>

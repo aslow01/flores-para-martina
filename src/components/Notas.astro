@@ -1,0 +1,153 @@
+---
+import { notas } from '../content/martina';
+import { crearRng, semillaDe } from '../scripts/noise';
+import { crearFlor, florSVGCompleta } from '../scripts/flora';
+
+// Las flores prensadas se dibujan en el build: HTML puro, sin JS, sin imágenes.
+const rng = crearRng(semillaDe('notas al margen'));
+const items = notas.items.map((item) => ({
+  ...item,
+  svg: florSVGCompleta(crearFlor(crearRng(rng.hijo()), item.especie), 180, 'prensada', 'n'),
+}));
+---
+
+<section class="section notas" id="notas" aria-labelledby="notas-titulo">
+  <div class="container">
+    <div class="notas__cabecera">
+      <p class="eyebrow" data-reveal>{notas.eyebrow}</p>
+      <h2 class="display notas__titulo" id="notas-titulo" data-reveal="lines">{notas.titulo}</h2>
+    </div>
+
+    <ol class="notas__lista" role="list">
+      {
+        items.map((item, i) => (
+          <li class="nota" data-reveal data-reveal-delay={(i % 3) * 0.12}>
+            <div class="nota__flor" set:html={item.svg} />
+            <p class="nota__texto">{item.texto}</p>
+            <p class="eyebrow nota__pie">
+              {'enlace' in item ? <a href={item.enlace}>{item.pie}</a> : item.pie}
+            </p>
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+</section>
+
+<style>
+  .notas__cabecera {
+    display: grid;
+    gap: var(--space-s);
+    max-width: 30rem;
+    margin-bottom: var(--space-l);
+  }
+  .notas__titulo {
+    font-size: var(--step-2);
+    font-weight: 600;
+    font-variation-settings: 'wght' 600;
+    line-height: 1.05;
+  }
+  .notas__lista {
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: var(--space-l) var(--space-m);
+    counter-reset: nota;
+  }
+  .nota {
+    position: relative;
+    display: grid;
+    gap: var(--space-s);
+    align-content: start;
+    counter-increment: nota;
+  }
+  /* Colocación irregular, como cosas apoyadas en una mesa. */
+  .nota:nth-child(1) {
+    grid-column: 1 / span 2;
+  }
+  .nota:nth-child(2) {
+    grid-column: 3 / span 2;
+    margin-top: calc(var(--space-xl) * 1.4);
+  }
+  .nota:nth-child(2) .nota__flor {
+    width: clamp(8rem, 15vw, 12rem);
+  }
+  .nota:nth-child(3) {
+    grid-column: 5 / span 2;
+    margin-top: 0;
+  }
+  .nota:nth-child(4) {
+    grid-column: 2 / span 2;
+    margin-top: calc(var(--space-l) * -0.5);
+  }
+  .nota:nth-child(5) {
+    grid-column: 5 / span 2;
+    margin-top: var(--space-l);
+  }
+  .nota__flor {
+    width: clamp(6.5rem, 12vw, 9.5rem);
+    aspect-ratio: 1;
+    filter: saturate(0.88) contrast(0.96) drop-shadow(0 8px 10px rgb(29 26 22 / 0.18));
+    transition: transform var(--dur-base) var(--ease-out);
+  }
+  .nota:nth-child(odd) .nota__flor {
+    transform: rotate(-7deg);
+  }
+  .nota:nth-child(even) .nota__flor {
+    transform: rotate(6deg);
+  }
+  .nota:hover .nota__flor {
+    transform: rotate(0deg) scale(1.04);
+  }
+  .nota__flor :global(svg) {
+    width: 100%;
+    height: 100%;
+  }
+  .nota__texto {
+    font-size: var(--step-0);
+    line-height: 1.5;
+    text-wrap: pretty;
+    max-width: 30ch;
+  }
+  .nota__texto::before {
+    content: counter(nota, decimal-leading-zero);
+    display: block;
+    font-family: var(--font-label);
+    font-size: var(--step--1);
+    letter-spacing: 0.14em;
+    color: var(--pollen);
+    margin-bottom: 0.4em;
+  }
+  .nota__pie {
+    font-size: var(--step--1);
+  }
+
+  @media (max-width: 860px) {
+    .notas__lista {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: var(--space-l) var(--space-m);
+    }
+    .nota:nth-child(n) {
+      grid-column: auto;
+      margin-top: 0;
+    }
+    .nota:nth-child(even) {
+      margin-top: var(--space-l);
+    }
+  }
+  @media (max-width: 480px) {
+    .notas__lista {
+      grid-template-columns: 1fr;
+    }
+    .nota:nth-child(even) {
+      margin-top: 0;
+    }
+    .nota {
+      grid-template-columns: auto 1fr;
+      column-gap: var(--space-m);
+    }
+    .nota__flor {
+      grid-row: 1 / span 2;
+      width: 5.5rem;
+    }
+  }
+</style>

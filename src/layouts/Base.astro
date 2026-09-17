@@ -1,0 +1,95 @@
+---
+import '../styles/global.css';
+import { meta } from '../content/martina';
+import frauncesUrl from '../assets/fonts/fraunces-soft-wght.woff2?url';
+import alegreyaUrl from '../assets/fonts/alegreya-400.woff2?url';
+
+interface Props {
+  titulo?: string;
+  descripcion?: string;
+  /** Página secundaria (404): sin intro ni scripts pesados. */
+  simple?: boolean;
+}
+
+const { titulo = meta.titulo, descripcion = meta.descripcion, simple = false } = Astro.props;
+
+// Base siempre con barra final: sirve tanto para "/" como para "/flores-para-martina/".
+const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
+// URL absoluta del sitio: en GitHub Actions sale de `site`; localmente, del contenido.
+const sitio = Astro.site ? new URL(base, Astro.site).href : meta.url;
+const ogImagen = new URL('og.png', sitio).href;
+---
+
+<!doctype html>
+<html lang="es-AR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>{titulo}</title>
+    <meta name="description" content={descripcion} />
+    <meta name="theme-color" content="#f5eedf" />
+    <meta name="color-scheme" content="light" />
+    {/* Es una página personal: mejor que no aparezca en buscadores. Borrá esta línea si querés que se indexe. */}
+    <meta name="robots" content="noindex" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={titulo} />
+    <meta property="og:description" content={descripcion} />
+    <meta property="og:image" content={ogImagen} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:locale" content="es_AR" />
+    <meta property="og:url" content={sitio} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={titulo} />
+    <meta name="twitter:description" content={descripcion} />
+    <meta name="twitter:image" content={ogImagen} />
+
+    <link rel="icon" href={`${base}favicon.svg`} type="image/svg+xml" />
+    <link rel="apple-touch-icon" href={`${base}apple-touch-icon.png`} />
+    <link rel="canonical" href={sitio} />
+
+    <link rel="preload" href={frauncesUrl} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={alegreyaUrl} as="font" type="font/woff2" crossorigin />
+
+    <script is:inline>
+      // Antes del primer pintado: marca que hay JS (para los revelados) y si se pide menos movimiento.
+      document.documentElement.classList.add('js');
+      if (matchMedia('(prefers-reduced-motion: reduce)').matches) document.documentElement.classList.add('reduce');
+      // Paracaídas: si el JS principal no llega (red, bloqueador, error), que se vea todo igual.
+      setTimeout(function () {
+        if (!document.documentElement.classList.contains('listo')) document.documentElement.classList.add('sin-js');
+      }, 3500);
+    </script>
+  </head>
+  <body>
+    <a class="skip" href="#contenido">Ir al contenido</a>
+    <slot />
+    <div class="grain" aria-hidden="true"></div>
+    {
+      !simple && (
+        <>
+          <canvas class="rafaga" aria-hidden="true"></canvas>
+          <div class="toast" aria-live="polite">
+            <span class="toast__texto"></span>
+          </div>
+        </>
+      )
+    }
+    {!simple && <script src="../scripts/main.ts"></script>}
+  </body>
+</html>
+
+<style is:global>
+  .rafaga {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: calc(var(--z-grain) - 1);
+    pointer-events: none;
+  }
+  html.intro-activa {
+    overflow: hidden;
+  }
+</style>

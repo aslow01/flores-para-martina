@@ -1,0 +1,240 @@
+---
+import { ramo } from '../content/martina';
+---
+
+<section class="section ramo" id="ramo" aria-labelledby="ramo-titulo" data-state="cerrado">
+  <div class="container ramo__grid">
+    <div class="ramo__cabecera" aria-live="polite">
+      <p class="eyebrow" data-reveal>{ramo.eyebrow}</p>
+
+      <div class="ramo__cerrado">
+        <h2 class="display ramo__titulo" id="ramo-titulo" data-reveal="lines">{ramo.tituloCerrado}</h2>
+        <p class="ramo__instruccion" data-reveal>
+          <span class="ramo__solo-arrastre">{ramo.instruccion} <span class="ramo__o small">{ramo.instruccionTeclado}</span></span>
+          <span class="ramo__sin-movimiento">{ramo.instruccionSinMovimiento}</span>
+        </p>
+        <button class="btn btn--ghost ramo__abrir" type="button" data-reveal>{ramo.botonAbrir}</button>
+      </div>
+
+      <div class="ramo__abierto">
+        <h2 class="display ramo__titulo">{ramo.tituloAbierto}</h2>
+        <p class="ramo__bajada">{ramo.bajadaAbierto}</p>
+        <a class="btn ramo__leer" href="#carta" data-scroll="-32">
+          {ramo.leerTarjeta}
+          <svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M7 1v11M2 7.5 7 12.5l5-5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+      </div>
+    </div>
+
+    <figure class="ramo__stage" data-reveal="fade">
+      <svg class="ramo__svg" role="img" aria-label={ramo.altRamo}></svg>
+      <div
+        class="ramo__handle"
+        tabindex="0"
+        role="button"
+        aria-label="Cinta del ramo. Arrastrá hacia abajo, o apretá Enter, para desatarla."
+      >
+        <svg class="ramo__flecha" width="18" height="26" viewBox="0 0 18 26" aria-hidden="true">
+          <path d="M9 1v22M2 16.5 9 24l7-7.5" fill="none" stroke="#f5eedf" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+      </div>
+      <div class="ramo__tag" aria-hidden="true">
+        <span class="hand ramo__tag-texto">{ramo.etiqueta}</span>
+        <span class="eyebrow ramo__tag-fecha">21 · 09</span>
+      </div>
+    </figure>
+  </div>
+</section>
+
+<style>
+  .ramo__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    gap: var(--space-l);
+    align-items: start;
+  }
+  .ramo__cabecera {
+    position: sticky;
+    top: 14vh;
+    display: grid;
+    gap: var(--space-s);
+  }
+  .ramo__titulo {
+    font-size: var(--step-3);
+    line-height: 1;
+    letter-spacing: -0.02em;
+  }
+  .ramo__instruccion {
+    font-size: var(--step-1);
+    color: var(--ink-2);
+    max-width: 22ch;
+    text-wrap: pretty;
+  }
+  .ramo__o {
+    display: block;
+    margin-top: 0.3em;
+  }
+  .ramo__sin-movimiento {
+    display: none;
+  }
+  html.reduce .ramo__solo-arrastre {
+    display: none;
+  }
+  html.reduce .ramo__sin-movimiento {
+    display: inline;
+  }
+  .ramo__abrir {
+    justify-self: start;
+    margin-top: var(--space-xs);
+  }
+  .ramo__cerrado,
+  .ramo__abierto {
+    display: grid;
+    gap: var(--space-s);
+  }
+  .ramo__abierto {
+    display: none;
+  }
+  .ramo[data-state='abierto'] .ramo__cerrado,
+  .ramo.ramo--revelado .ramo__cerrado {
+    display: none;
+  }
+  .ramo[data-state='abierto'] .ramo__abierto,
+  .ramo.ramo--revelado .ramo__abierto {
+    display: grid;
+    animation: aparecer 1s var(--ease-out) both;
+  }
+  @keyframes aparecer {
+    from {
+      opacity: 0;
+      transform: translateY(14px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+  .ramo__bajada {
+    color: var(--ink-2);
+    max-width: 34ch;
+    text-wrap: pretty;
+  }
+  .ramo__leer {
+    justify-self: start;
+  }
+
+  .ramo__stage {
+    position: relative;
+    margin: 0;
+    width: min(100%, calc(84vh * 0.75));
+    aspect-ratio: 3 / 4;
+    justify-self: center;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+  .ramo__svg {
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+  }
+  .ramo__handle {
+    /* Cubre el moño y las colas: se agarra desde cualquier parte de la cinta. */
+    position: absolute;
+    left: 50%;
+    top: 65%;
+    width: 34%;
+    aspect-ratio: 1;
+    margin: -17% 0 0 -17%;
+    border-radius: 50%;
+    touch-action: none;
+    cursor: grab;
+    display: grid;
+    place-items: end center;
+    padding-bottom: 6%;
+  }
+  .ramo__handle:focus-visible {
+    outline: 2px solid var(--ink);
+    outline-offset: -6px;
+  }
+  .ramo[data-state='abriendo'] .ramo__handle,
+  .ramo[data-state='abierto'] .ramo__handle {
+    pointer-events: none;
+    opacity: 0;
+    visibility: hidden;
+  }
+  .ramo__flecha {
+    opacity: 0.95;
+    filter: drop-shadow(0 1px 2px rgb(0 0 0 / 0.45));
+  }
+
+  .ramo__tag {
+    position: absolute;
+    left: 58%;
+    top: 74%;
+    display: grid;
+    gap: 0.1rem;
+    padding: 0.55rem 0.9rem 0.6rem 1.2rem;
+    background: var(--paper-2);
+    border: 1px solid var(--paper-deep);
+    border-radius: 3px 10px 10px 3px;
+    box-shadow:
+      0 1px 0 rgb(29 26 22 / 0.08),
+      0 12px 24px -16px rgb(29 26 22 / 0.5);
+    transform-origin: 10% 0;
+    pointer-events: none;
+  }
+  .ramo__tag::before {
+    /* el ojal */
+    content: '';
+    position: absolute;
+    left: 0.45rem;
+    top: 50%;
+    width: 7px;
+    height: 7px;
+    margin-top: -4px;
+    border-radius: 50%;
+    background: var(--paper);
+    box-shadow: inset 0 0 0 1px var(--kraft-3);
+  }
+  .ramo__tag::after {
+    /* el hilo hasta el yute */
+    content: '';
+    position: absolute;
+    left: 0.7rem;
+    top: 50%;
+    width: 78px;
+    height: 1px;
+    background: var(--kraft-3);
+    transform-origin: 0 50%;
+    transform: rotate(-138deg);
+    opacity: 0.8;
+  }
+  .ramo__tag-texto {
+    font-size: var(--step-1);
+    color: var(--ribbon);
+    white-space: nowrap;
+  }
+  .ramo__tag-fecha {
+    font-size: var(--step--2);
+  }
+
+  @media (max-width: 860px) {
+    .ramo__grid {
+      grid-template-columns: 1fr;
+      gap: var(--space-m);
+    }
+    .ramo__cabecera {
+      position: static;
+    }
+    .ramo__stage {
+      width: min(100%, 440px);
+    }
+    .ramo__tag {
+      left: 56%;
+      padding: 0.4rem 0.7rem 0.45rem 1rem;
+    }
+    .ramo__tag-texto {
+      font-size: var(--step-0);
+    }
+  }
+</style>

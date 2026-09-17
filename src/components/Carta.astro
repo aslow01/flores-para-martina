@@ -1,0 +1,214 @@
+---
+import { carta } from '../content/martina';
+const c = carta.correccion;
+---
+
+<section class="section carta" id="carta" aria-labelledby="carta-titulo">
+  <div class="container">
+    <h2 class="eyebrow carta__eyebrow" id="carta-titulo" data-reveal>{carta.eyebrow}</h2>
+
+    <article class="carta__papel" data-reveal="fade">
+      <p class="hand carta__saludo" data-reveal="wipe" data-reveal-start="top 80%">{carta.saludo}</p>
+
+      <div class="carta__cuerpo">
+        {carta.parrafos.map((p) => <p class="carta__p">{p}</p>)}
+
+        <p class="carta__p carta__p--corr">
+          {c.previo}
+          <span class="corr">
+            <span class="corr__impresa">
+              {c.antes}
+              <svg class="corr__tacha corr__tacha--1" viewBox="0 0 100 24" preserveAspectRatio="none" aria-hidden="true">
+                <path d="M3 13 C 22 9, 48 16, 97 10" />
+              </svg>
+            </span>
+            <span class="corr__mano corr__mano--medio hand">
+              {c.medio}
+              <svg class="corr__tacha corr__tacha--2" viewBox="0 0 100 24" preserveAspectRatio="none" aria-hidden="true">
+                <path d="M3 12 C 30 16, 62 8, 97 13" />
+              </svg>
+            </span>
+            <span class="corr__mano corr__mano--final hand">{c.despues}</span>
+          </span>
+          {c.posterior}
+        </p>
+      </div>
+
+      <p class="display carta__despedida">{carta.despedida}</p>
+      <p class="hand carta__firma" data-reveal="wipe" data-reveal-start="top 92%">{carta.firma}</p>
+
+      <details class="pd">
+        <summary class="hand pd__resumen">{carta.pdEtiqueta}</summary>
+        <div class="pd__texto">
+          <p>{carta.pd}</p>
+          <label class="pd__campo-wrap">
+            <span class="sr-only">Escribí tu nombre</span>
+            <input class="pd__campo hand" type="text" autocomplete="off" autocapitalize="none" spellcheck="false" enterkeyhint="done" placeholder={carta.pdCampo} />
+          </label>
+        </div>
+      </details>
+    </article>
+  </div>
+</section>
+
+<style>
+  .carta__eyebrow {
+    margin-bottom: var(--space-m);
+  }
+  .carta__papel {
+    position: relative;
+    max-width: 44rem;
+    margin-inline: auto;
+    padding: clamp(1.6rem, 5vw, 4rem) clamp(1.2rem, 6vw, 4.5rem) clamp(2rem, 5vw, 3.5rem);
+    background:
+      linear-gradient(180deg, rgb(255 255 255 / 0.35), rgb(255 255 255 / 0) 30%),
+      var(--paper-2);
+    border: 1px solid var(--paper-deep);
+    box-shadow:
+      0 1px 0 rgb(255 255 255 / 0.5) inset,
+      0 30px 60px -40px rgb(29 26 22 / 0.55),
+      0 2px 6px -2px rgb(29 26 22 / 0.2);
+    transform: rotate(-0.6deg);
+  }
+  .carta__papel::before {
+    /* una tira de cinta adhesiva arriba */
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: -0.7rem;
+    width: 6.5rem;
+    height: 1.5rem;
+    margin-left: -3.25rem;
+    background: rgb(255 246 214 / 0.55);
+    border: 1px solid rgb(29 26 22 / 0.06);
+    transform: rotate(-1.5deg);
+    box-shadow: 0 1px 2px rgb(29 26 22 / 0.08);
+  }
+  .carta__saludo {
+    font-size: var(--step-2);
+    color: var(--ribbon);
+    margin-bottom: var(--space-m);
+    transform: rotate(-1deg);
+    transform-origin: 0 100%;
+  }
+  .carta__cuerpo {
+    display: grid;
+    gap: 1.15em;
+    font-size: var(--step-0);
+    line-height: 1.62;
+    max-width: var(--measure);
+  }
+  .carta__p--corr {
+    line-height: 1.75;
+  }
+  .corr {
+    white-space: nowrap;
+  }
+  .corr__impresa,
+  .corr__mano {
+    position: relative;
+    display: inline-block;
+    padding-inline: 0.08em;
+  }
+  .corr__mano {
+    color: var(--ribbon);
+    font-size: 1.12em;
+    line-height: 1;
+    transform: rotate(-2.5deg) translateY(-0.06em);
+    margin-inline: 0.12em;
+  }
+  .corr__mano--final {
+    font-size: 1.22em;
+    transform: rotate(-3deg) translateY(-0.1em);
+  }
+  .corr__tacha {
+    position: absolute;
+    left: -4%;
+    top: 50%;
+    width: 108%;
+    height: 0.75em;
+    margin-top: -0.38em;
+    overflow: visible;
+    pointer-events: none;
+  }
+  .corr__tacha path {
+    fill: none;
+    stroke: var(--ribbon);
+    stroke-width: 2.4;
+    stroke-linecap: round;
+    vector-effect: non-scaling-stroke;
+  }
+  html:not(.js) .corr__tacha path {
+    stroke-dasharray: none;
+  }
+  .carta__despedida {
+    margin-top: var(--space-l);
+    font-size: var(--step-2);
+    font-style: italic;
+    font-weight: 500;
+    font-variation-settings: 'wght' 500;
+    letter-spacing: -0.01em;
+  }
+  .carta__firma {
+    margin-top: var(--space-s);
+    font-size: var(--step-3);
+    color: var(--ribbon);
+    transform: rotate(-3deg);
+    transform-origin: 0 100%;
+    margin-left: 0.4em;
+  }
+  .pd {
+    margin-top: var(--space-l);
+    max-width: 40ch;
+  }
+  .pd__resumen {
+    display: inline-block;
+    cursor: pointer;
+    font-size: var(--step-1);
+    color: var(--ribbon);
+    list-style: none;
+    border-bottom: 1px dashed color-mix(in oklab, var(--ribbon) 45%, transparent);
+    transform: rotate(-1.5deg);
+  }
+  .pd__resumen::-webkit-details-marker {
+    display: none;
+  }
+  .pd__texto {
+    margin-top: 0.8em;
+    font-size: var(--step--1);
+    color: var(--ink-2);
+    line-height: 1.55;
+    display: grid;
+    gap: 0.9em;
+  }
+  .pd__campo-wrap {
+    display: block;
+    max-width: 18em;
+  }
+  .pd__campo {
+    width: 100%;
+    font-size: var(--step-1);
+    color: var(--ribbon);
+    background: none;
+    border: 0;
+    border-bottom: 1px dashed color-mix(in oklab, var(--ribbon) 45%, transparent);
+    border-radius: 0;
+    padding: 0.2em 0.1em;
+    transform: rotate(-1deg);
+  }
+  .pd__campo::placeholder {
+    color: color-mix(in oklab, var(--ribbon) 45%, transparent);
+  }
+  .pd__campo:focus-visible {
+    outline: none;
+    border-bottom-color: var(--ribbon);
+  }
+  @media (max-width: 720px) {
+    .carta__papel {
+      transform: rotate(-0.3deg);
+    }
+    .corr {
+      white-space: normal;
+    }
+  }
+</style>

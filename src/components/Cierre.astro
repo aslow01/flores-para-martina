@@ -1,0 +1,129 @@
+---
+import { cierre, colofon, fuentes, meta } from '../content/martina';
+const peso = colofon.peso(meta.pesoKb);
+---
+
+<section class="section cierre" id="cierre" aria-labelledby="cierre-titulo">
+  <canvas class="cierre__petalos" aria-hidden="true"></canvas>
+  <div class="container cierre__grid">
+    <h2 class="display cierre__titulo" id="cierre-titulo" data-reveal="lines" data-reveal-start="top 80%">{cierre.titulo}</h2>
+    <p class="cierre__bajada" data-reveal data-reveal-delay="0.2">{cierre.bajada}</p>
+    <button class="btn btn--ghost cierre__volver" type="button" data-reveal data-reveal-delay="0.3">
+      <svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M7 13V2M2 6.5 7 1.5l5 5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      {cierre.botonVolver}
+    </button>
+  </div>
+</section>
+
+<footer class="colofon" id="colofon">
+  <div class="container colofon__grid">
+    <div class="colofon__texto">
+      <p>{colofon.texto}</p>
+      <p>
+        {colofon.tipografia}
+        {peso && <span> {peso}</span>}
+        {meta.repo && (
+          <span>
+            {' '}
+            <a href={meta.repo} target="_blank" rel="noopener noreferrer">{colofon.codigo}<span class="sr-only"> (se abre en otra pestaña)</span></a>.
+          </span>
+        )}
+      </p>
+    </div>
+    <div class="colofon__fuentes">
+      <p class="eyebrow">{colofon.fuentesTitulo}</p>
+      <ol role="list">
+        {fuentes.map((f) => (
+          <li>
+            <a href={f.url} target="_blank" rel="noopener noreferrer">
+              {f.texto}
+              <span class="sr-only"> (se abre en otra pestaña)</span>
+            </a>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .cierre {
+    position: relative;
+    min-height: 78svh;
+    display: grid;
+    align-items: center;
+    overflow: clip;
+    isolation: isolate;
+  }
+  .cierre__petalos {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    pointer-events: none;
+  }
+  .cierre__grid {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    gap: var(--space-m);
+    justify-items: start;
+  }
+  .cierre__titulo {
+    font-size: var(--step-4);
+    line-height: 0.94;
+    letter-spacing: -0.025em;
+    max-width: 9em;
+  }
+  .cierre__bajada {
+    font-size: var(--step-1);
+    color: var(--ink-2);
+  }
+
+  .colofon {
+    border-top: 1px solid var(--line-soft);
+    padding-block: var(--space-l) var(--space-xl);
+    font-size: var(--step--1);
+    color: var(--ink-2);
+  }
+  .colofon__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+    gap: var(--space-l);
+  }
+  .colofon__texto {
+    max-width: 52ch;
+    display: grid;
+    gap: 0.8em;
+    line-height: 1.55;
+  }
+  .colofon__fuentes ol {
+    margin-top: 0.8em;
+    display: grid;
+    gap: 0.45em;
+    line-height: 1.4;
+  }
+  .colofon__fuentes li {
+    padding-left: 1.4em;
+    text-indent: -1.4em;
+  }
+  .colofon__fuentes li::before {
+    content: '\2014';
+    display: inline-block;
+    width: 1.4em;
+    text-indent: 0;
+    color: var(--honey);
+  }
+  @media (max-width: 860px) {
+    .colofon__grid {
+      grid-template-columns: 1fr;
+      gap: var(--space-m);
+    }
+  }
+  @media (max-width: 720px) {
+    .cierre {
+      min-height: 64svh;
+    }
+  }
+</style>

@@ -1,0 +1,54 @@
+/* Tipografías self-hosted. Los archivos viven en src/assets/fonts (ver scripts/fonts.py). */
+
+@font-face {
+  font-family: 'Fraunces Soft';
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url('../assets/fonts/fraunces-soft-wght.woff2') format('woff2-variations');
+}
+@font-face {
+  font-family: 'Fraunces Soft';
+  font-style: italic;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url('../assets/fonts/fraunces-soft-wght-italic.woff2') format('woff2-variations');
+}
+
+@font-face {
+  font-family: 'Alegreya';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('../assets/fonts/alegreya-400.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Alegreya';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url('../assets/fonts/alegreya-400-italic.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Alegreya';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('../assets/fonts/alegreya-600.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Alegreya Sans SC';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url('../assets/fonts/alegreya-sans-sc-500.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Nothing You Could Do';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('../assets/fonts/nothing-you-could-do-400.woff2') format('woff2');
+}

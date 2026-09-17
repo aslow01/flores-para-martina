@@ -1,0 +1,111 @@
+---
+import { intro } from '../content/martina';
+
+// Ocho pétalos alrededor de (120,110), dibujados a trazo y después rellenados.
+const petalo = 'M120 110 C107 92 106 62 120 46 C134 62 133 92 120 110 Z';
+const angulos = Array.from({ length: 8 }, (_, i) => i * 45 + 22.5);
+---
+
+<div class="intro" role="region" aria-label="Intro" data-nosnippet>
+  <svg class="intro__flor" viewBox="0 0 240 320" width="240" height="320" aria-hidden="true" focusable="false">
+    <g class="intro__rellenos">
+      {angulos.map((a) => <path class="intro__relleno" d={petalo} transform={`rotate(${a} 120 110)`} fill="#f1b52b" />)}
+      <circle class="intro__relleno" cx="120" cy="110" r="14" fill="#4a2f10" />
+      <path class="intro__relleno" d="M121 202 C142 190 160 196 168 212 C150 218 132 214 121 202 Z" fill="#5e6b3a" />
+      <path class="intro__relleno" d="M119 244 C98 232 80 238 72 254 C90 260 108 256 119 244 Z" fill="#5e6b3a" />
+    </g>
+    <g class="intro__trazos" fill="none" stroke="#ffd35a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path class="intro__trazo" d="M120 118 C117 168 125 220 120 296" />
+      <path class="intro__trazo" d="M121 202 C142 190 160 196 168 212 C150 218 132 214 121 202 Z" />
+      <path class="intro__trazo" d="M119 244 C98 232 80 238 72 254 C90 260 108 256 119 244 Z" />
+      {angulos.map((a) => <path class="intro__trazo" d={petalo} transform={`rotate(${a} 120 110)`} />)}
+      <circle class="intro__trazo" cx="120" cy="110" r="14" />
+    </g>
+  </svg>
+
+  <ol class="intro__log" aria-hidden="true">
+    {intro.log.map((linea) => <li>{linea}</li>)}
+  </ol>
+
+  <button class="intro__saltar" type="button">{intro.saltar}</button>
+</div>
+
+<style>
+  .intro {
+    position: fixed;
+    inset: 0;
+    z-index: var(--z-intro);
+    display: grid;
+    place-items: center;
+    background:
+      radial-gradient(120% 90% at 50% 60%, var(--screen-2) 0%, var(--screen) 70%),
+      var(--screen);
+    color: var(--screen-ink);
+    cursor: pointer;
+  }
+  /* Sin JS no hay intro: el contenido tiene que verse igual. */
+  html:not(.js) .intro,
+  html.reduce .intro {
+    display: none;
+  }
+  .intro__flor {
+    width: min(38vw, 240px);
+    height: auto;
+    filter: drop-shadow(0 0 28px rgb(241 181 43 / 0.16));
+  }
+  .intro__log {
+    position: absolute;
+    left: clamp(1rem, 4vw, 3rem);
+    bottom: clamp(1rem, 4vw, 3rem);
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    line-height: 1.7;
+    letter-spacing: 0.01em;
+    counter-reset: linea;
+  }
+  .intro__log li {
+    white-space: nowrap;
+    opacity: 0;
+  }
+  .intro__log li::before {
+    content: '›';
+    margin-right: 0.7em;
+    opacity: 0.55;
+  }
+  .intro__log li:last-child::after {
+    content: '';
+    display: inline-block;
+    width: 0.55em;
+    height: 1em;
+    margin-left: 0.35em;
+    vertical-align: -0.15em;
+    background: currentColor;
+    opacity: 0.7;
+    animation: parpadeo 1.1s steps(2, start) infinite;
+  }
+  @keyframes parpadeo {
+    to {
+      visibility: hidden;
+    }
+  }
+  .intro__saltar {
+    position: absolute;
+    right: clamp(1rem, 4vw, 3rem);
+    top: clamp(1rem, 4vw, 3rem);
+    font-family: var(--font-label);
+    font-size: var(--step--1);
+    letter-spacing: 0.12em;
+    color: var(--screen-ink);
+    padding: 0.5em 0.9em;
+    border: 1px solid rgb(147 166 207 / 0.35);
+    border-radius: 999px;
+    opacity: 0.85;
+    transition: opacity var(--dur-micro) var(--ease-out);
+  }
+  .intro__saltar:hover {
+    opacity: 1;
+  }
+  .intro__saltar:focus-visible {
+    outline-color: var(--sun);
+  }
+</style>

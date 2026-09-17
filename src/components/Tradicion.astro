@@ -1,0 +1,100 @@
+---
+import { tradicion } from '../content/martina';
+---
+
+<section class="section tradicion" id="por-que" aria-labelledby="tradicion-titulo">
+  <div class="container tradicion__grid">
+    <div class="tradicion__numero display tabular" aria-hidden="true">
+      <span data-reveal="fade">21</span>
+      <span class="tradicion__barra" data-reveal="fade" data-reveal-delay="0.1">/</span>
+      <span data-reveal="fade" data-reveal-delay="0.2">09</span>
+    </div>
+
+    <div class="tradicion__texto">
+      <p class="eyebrow" data-reveal>{tradicion.eyebrow}</p>
+      <h2 class="display tradicion__titulo" id="tradicion-titulo" data-reveal="lines">{tradicion.titulo}</h2>
+      <div class="prose tradicion__prose" data-reveal="fade" data-reveal-delay="0.15">
+        {tradicion.parrafos.map((p) => <p>{p}</p>)}
+        <p class="tradicion__remate">{tradicion.remate}</p>
+      </div>
+      <p class="hand tradicion__nota" data-reveal="wipe" data-reveal-delay="0.3">
+        <a href={tradicion.notaMargenUrl} target="_blank" rel="noopener noreferrer">{tradicion.notaMargen}<span class="sr-only"> (se abre en otra pestaña)</span></a>
+      </p>
+    </div>
+  </div>
+</section>
+
+<style>
+  .tradicion__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    gap: var(--space-l);
+    align-items: start;
+  }
+  .tradicion__numero {
+    position: sticky;
+    top: 12vh;
+    font-size: var(--step-5);
+    line-height: 0.85;
+    letter-spacing: -0.05em;
+    color: var(--honey);
+    display: flex;
+    align-items: baseline;
+    gap: 0.02em;
+    user-select: none;
+  }
+  .tradicion__barra {
+    font-style: italic;
+    font-weight: 300;
+    font-variation-settings: 'wght' 300;
+    color: var(--marigold-deep);
+    opacity: 0.9;
+    font-size: 0.8em;
+    transform: translateY(-0.04em);
+  }
+  .tradicion__texto {
+    display: grid;
+    gap: var(--space-m);
+    max-width: 40rem;
+  }
+  .tradicion__titulo {
+    font-size: var(--step-3);
+    line-height: 1.02;
+    font-weight: 600;
+    font-variation-settings: 'wght' 600;
+    letter-spacing: -0.015em;
+  }
+  .tradicion__prose p + p {
+    margin-top: 1.1em;
+  }
+  .tradicion__remate {
+    font-style: italic;
+    color: var(--ink);
+    margin-top: 1.4em !important;
+  }
+  .tradicion__nota {
+    font-size: var(--step-1);
+    color: var(--ribbon);
+    transform: rotate(-1.4deg);
+    justify-self: end;
+    margin-right: var(--space-m);
+  }
+  .tradicion__nota a {
+    text-decoration-color: color-mix(in oklab, var(--ribbon) 40%, transparent);
+  }
+
+  @media (max-width: 860px) {
+    .tradicion__grid {
+      grid-template-columns: 1fr;
+      gap: var(--space-m);
+    }
+    .tradicion__numero {
+      position: static;
+      font-size: var(--step-4);
+    }
+    .tradicion__nota {
+      justify-self: start;
+      margin-left: var(--space-s);
+    }
+  }
+</style>
